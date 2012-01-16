@@ -1,0 +1,27 @@
+#include <windows.h>
+#include <commctrl.h>
+#include "resource.h"
+
+CREATEPROCESS_MANIFEST_RESOURCE_ID RT_MANIFEST "loader.exe.manifest"
+
+IDI_APPICON ICON "loader.ico"
+
+STRINGTABLE
+BEGIN
+	IDS_LOADING, "Please wait while the application is being installed.\nThis might take a while..."
+	IDS_SUCCESS, "Application installed succesfully."
+	IDS_FAILURE, "An error occured during installation of the application.\nPlease contact the Service Desk and ask for assistance."
+END 
+
+IDD_LOADER DIALOGEX 150, 150, 261, 60
+CAPTION "Install"
+STYLE DS_MODALFRAME | DS_NOIDLEMSG | WS_POPUP | WS_CAPTION
+EXSTYLE WS_EX_APPWINDOW
+LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
+FONT 9, "MS Shell Dlg"
+BEGIN
+   CONTROL IDI_APPICON, IDC_DLGICON, "STATIC", SS_ICON | WS_CHILD | WS_VISIBLE, 7, 7, 20, 20
+   CONTROL "", IDC_MESSAGE, "STATIC", SS_LEFT | WS_CHILD | WS_VISIBLE | WS_GROUP, 31, 7, 223, 28
+   CONTROL "", IDC_PROGRESS, "msctls_progress32", WS_CHILD | WS_BORDER, 7, 42, 183, 10
+   CONTROL "Close", IDC_OK, "BUTTON", BS_PUSHBUTTON | WS_CHILD | WS_TABSTOP, 195, 40, 60, 14
+END
