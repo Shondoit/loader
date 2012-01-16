@@ -1,11 +1,11 @@
 #define DEBUG 0
 #define _WIN32_WINNT 0x0501
+#define __MSVCRT_VERSION__ 0x0700
 
 #include <windows.h>
 #include <commctrl.h>
 #include <ctype.h>
 #include <tchar.h>
-#include <stdio.h>
 #include <shlwapi.h>
 #include "resource.h"
 
@@ -16,14 +16,21 @@
 
 #define IDT_TIMER1 1001
 
+#ifdef _UNICODE
+#define _tcserror _wcserror
+#else
+#define _tcserror strerror
+#endif
+
 LRESULT CALLBACK DlgProc(HWND, UINT, WPARAM, LPARAM);
-LPCTSTR loadResString(UINT id);
 
 DWORD exitCode;
 HANDLE hChildProc;
 BOOL silentFlag;
 
-int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nCmdShow) {
+LPCTSTR MSG_USAGE = TEXT("loader.exe [/s] commandline");
+
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
 	exitCode = ERROR_SUCCESS;
 
 	LPTSTR cmdline = GetCommandLine();
@@ -32,12 +39,16 @@ int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdL
 	if (argc < 2) {
 		TCHAR message[256 * sizeof(TCHAR)];
 		LoadString(GetModuleHandle(NULL), IDS_USAGE, message, sizeof(message));
-		MessageBox(NULL, message, TEXT("Usage"), MB_OK | MB_ICONINFORMATION);
+		TCHAR usageMessage[_tcslen(MSG_USAGE) + _tcslen(message) + 3];
+		_tcsncpy(usageMessage, message, sizeof(usageMessage));
+		_tcsncat(usageMessage, TEXT(": "), sizeof(usageMessage));
+		_tcsncat(usageMessage, MSG_USAGE, sizeof(usageMessage));
+		MessageBox(NULL, usageMessage, message, MB_OK | MB_ICONINFORMATION);
 		return ERROR_INVALID_PARAMETER;
 	}
 	cmdline = PathGetArgs(cmdline);
-	if (argv[1][0] == '/') {
-		if (_tcslen(argv[1]) == 2 && _totlower(argv[1][1]) == 's') {
+	if (argv[1][0] == _T('/')) {
+		if (_totlower(argv[1][1]) == _T('s')) {
 			silentFlag = TRUE;
 			cmdline = PathGetArgs(cmdline);
 		}
@@ -51,7 +62,7 @@ int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdL
 
 	if (!CreateProcess(NULL, cmdline, NULL, NULL, FALSE, 0, NULL, NULL, &startInfo, &procInfo)) {
 		exitCode = GetLastError();
-		MessageBox(NULL, strerror(exitCode), NULL, MB_ICONERROR);
+		MessageBox(NULL, _tcserror(exitCode), NULL, MB_ICONERROR);
 		return exitCode;
 	}
 	hChildProc = procInfo.hProcess;
@@ -105,6 +116,12 @@ LRESULT CALLBACK DlgProc(HWND hwndDlg, UINT message, WPARAM wParam, LPARAM lPara
 				}
 
 				TCHAR dialogText[256 * sizeof(TCHAR)];
+				LoadString(GetModuleHandle(NULL), IDS_INSTALL, dialogText, sizeof(dialogText));
+				SetWindowText(hwndDlg, dialogText);
+
+				LoadString(GetModuleHandle(NULL), IDS_CLOSE, dialogText, sizeof(dialogText));
+				SetDlgItemText(hwndDlg, IDC_OK, dialogText);
+
 				LoadString(GetModuleHandle(NULL), IDS_LOADING, dialogText, sizeof(dialogText));
 				SetDlgItemText(hwndDlg, IDC_MESSAGE, dialogText);
 			}
@@ -114,15 +131,12 @@ LRESULT CALLBACK DlgProc(HWND hwndDlg, UINT message, WPARAM wParam, LPARAM lPara
 		case WM_COMMAND:
 			switch (LOWORD(wParam)) {
 				case IDOK:
-					if (hChildProc == 0) EndDialog(hwndDlg, wParam);
-					return TRUE;
-					break;
-#if DEBUG
 				case IDCANCEL:
-					EndDialog(hwndDlg, wParam);
-					return TRUE;
+					if (hChildProc == 0) {
+						EndDialog(hwndDlg, wParam);
+						return TRUE;
+					}
 					break;
-#endif
 			}
 			break;
 		case WM_TIMER:

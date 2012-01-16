@@ -5,35 +5,41 @@ CREATEPROCESS_MANIFEST_RESOURCE_ID RT_MANIFEST "loader.exe.manifest"
 
 IDI_APPICON ICON "loader.ico"
 
-LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_UK
+LANGUAGE LANG_ENGLISH, SUBLANG_NEUTRAL
 STRINGTABLE
 BEGIN
-	IDS_USAGE, "Usage: loader.exe [/s] commandline"
+	IDS_USAGE, "Usage"
 	IDS_LOADING, "Please wait while the application is being installed.\nThis might take a while..."
 	IDS_SUCCESS, "Application installed succesfully."
 	IDS_FAILURE, "An error occured during installation of the application.\nPlease contact the Service Desk and ask for assistance."
+	IDS_INSTALL, "Installing"
+	IDS_CLOSE, "Close"
 END
 
-LANGUAGE LANG_GERMAN, SUBLANG_GERMAN
+LANGUAGE LANG_GERMAN, SUBLANG_NEUTRAL
 STRINGTABLE
 BEGIN
-	IDS_USAGE, "Verbrauch: loader.exe [/s] commandline"
+	IDS_USAGE, "Verbrauch"
 	IDS_LOADING, "Bitte warten Sie, während die Anwendung installiert wird. Dies kann eine Weile dauern..."
 	IDS_SUCCESS, "Anwendung erfolgreich installiert."
 	IDS_FAILURE, "Ein Fehler ist aufgetreten während der Installation der Anwendung. Bitte kontaktieren Sie den Helpdesk und frag um Unterstützung."
+	IDS_INSTALL, "Installieren"
+	IDS_CLOSE, "Schliessen"
 END
 
-LANGUAGE LANG_DUTCH, SUBLANG_DUTCH
+LANGUAGE LANG_DUTCH, SUBLANG_NEUTRAL
 STRINGTABLE
 BEGIN
-	IDS_USAGE, "Gebruik: loader.exe [/s] commandline"
+	IDS_USAGE, "Gebruik"
 	IDS_LOADING, "Gelieve te wachten terwijl de applicatie wordt geïnstalleerd.\nDit kan enige tijd duren..."
 	IDS_SUCCESS, "Applicatie is succesvol geïnstalleerd."
 	IDS_FAILURE, "Er is een fout opgetreden tijdens de installatie van de applicatie.\nNeem contact op met de Service Desk en vraag om assistentie."
+	IDS_INSTALL, "Installeren"
+	IDS_CLOSE, "Sluiten"
 END
 
 IDD_LOADER DIALOGEX 150, 150, 261, 60
-CAPTION "Install"
+CAPTION ""
 STYLE DS_MODALFRAME | DS_NOIDLEMSG | WS_POPUP | WS_CAPTION
 EXSTYLE WS_EX_APPWINDOW
 LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
@@ -42,5 +48,5 @@ BEGIN
    CONTROL IDI_APPICON, IDC_DLGICON, "STATIC", SS_ICON | WS_CHILD | WS_VISIBLE, 7, 7, 20, 20
    CONTROL "", IDC_MESSAGE, "STATIC", SS_LEFT | WS_CHILD | WS_VISIBLE | WS_GROUP, 31, 7, 223, 28
    CONTROL "", IDC_PROGRESS, "msctls_progress32", WS_CHILD | WS_BORDER, 7, 42, 183, 10
-   CONTROL "Close", IDC_OK, "BUTTON", BS_PUSHBUTTON | WS_CHILD | WS_TABSTOP, 195, 40, 60, 14
+   CONTROL "", IDC_OK, "BUTTON", BS_PUSHBUTTON | WS_CHILD | WS_TABSTOP, 195, 40, 60, 14
 END
