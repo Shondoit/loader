@@ -30,7 +30,9 @@ int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdL
 	LPTSTR *argv = __targv;
 	int argc = __argc;
 	if (argc < 2) {
-		MessageBox(NULL, TEXT("Usage: loader.exe [/s] cmdline"), TEXT("Usage"), MB_OK | MB_ICONINFORMATION);
+		TCHAR message[256 * sizeof(TCHAR)];
+		LoadString(GetModuleHandle(NULL), IDS_USAGE, message, sizeof(message));
+		MessageBox(NULL, message, TEXT("Usage"), MB_OK | MB_ICONINFORMATION);
 		return ERROR_INVALID_PARAMETER;
 	}
 	cmdline = PathGetArgs(cmdline);

@@ -1,5 +1,6 @@
 #define IDI_APPICON 201
 
+#define IDS_USAGE 0
 #define IDS_LOADING 1
 #define IDS_SUCCESS 2
 #define IDS_FAILURE 3
