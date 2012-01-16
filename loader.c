@@ -22,12 +22,6 @@ LPCTSTR loadResString(UINT id);
 DWORD exitCode;
 HANDLE hChildProc;
 BOOL silentFlag;
-HMODULE hMod;
-
-
-LPCTSTR MSG_LOADING = TEXT("Please wait while the application is being installed.\nThis might take a while...");
-LPCTSTR MSG_SUCCESS = TEXT("Application installed succesfully.");
-LPCTSTR MSG_FAILURE = TEXT("An error occured during installation of the application.\nPlease contact the Service Desk and ask for assistance.");
 
 int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nCmdShow) {
 	exitCode = ERROR_SUCCESS;
@@ -108,8 +102,9 @@ LRESULT CALLBACK DlgProc(HWND hwndDlg, UINT message, WPARAM wParam, LPARAM lPara
 					EnableWindow(hwndOK, FALSE);
 				}
 
-				//DEBUG
-				SetDlgItemText(hwndDlg, IDC_MESSAGE, loadResString(IDS_LOADING));
+				TCHAR dialogText[256 * sizeof(TCHAR)];
+				LoadString(GetModuleHandle(NULL), IDS_LOADING, dialogText, sizeof(dialogText));
+				SetDlgItemText(hwndDlg, IDC_MESSAGE, dialogText);
 			}
 
 			SetTimer(hwndDlg, IDT_TIMER1, 500, (TIMERPROC)NULL);
@@ -151,12 +146,14 @@ LRESULT CALLBACK DlgProc(HWND hwndDlg, UINT message, WPARAM wParam, LPARAM lPara
 							SetWindowLong(hwndProg, GWL_STYLE, dwStyle & ~PBS_MARQUEE);
 							SendMessage(hwndProg, PBM_SETPOS, 100, 0);
 
+							TCHAR dialogText[256 * sizeof(TCHAR)];
 							if (exitCode == ERROR_SUCCESS) {
-								//SetDlgItemText(hwndDlg, IDC_MESSAGE, loadResString(IDS_SUCCESS));
+								LoadString(GetModuleHandle(NULL), IDS_SUCCESS, dialogText, sizeof(dialogText));
 							} else {
+								LoadString(GetModuleHandle(NULL), IDS_FAILURE, dialogText, sizeof(dialogText));
 								SendMessage(hwndProg, PBM_SETSTATE, PBST_ERROR, 0);
-								//SetDlgItemText(hwndDlg, IDC_MESSAGE, loadResString(IDS_FAILURE));
 							}
+							SetDlgItemText(hwndDlg, IDC_MESSAGE, dialogText);
 
 							HWND hwndOK = GetDlgItem(hwndDlg, IDC_OK);
 							EnableWindow(hwndOK, TRUE);
@@ -168,14 +165,4 @@ LRESULT CALLBACK DlgProc(HWND hwndDlg, UINT message, WPARAM wParam, LPARAM lPara
 	}
 
 	return FALSE;
-}
-
-LPCTSTR loadResString(UINT id) {
-	if (!hMod) hMod = GetModuleHandle(NULL);
-	
-	LPCTSTR result = NULL;
-	LoadString(hMod, id, (LPTSTR)&result, 0);
-
-	MessageBox(NULL, strerror(GetLastError()), NULL, MB_OK);
-	return result;
 }
