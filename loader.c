@@ -6,6 +6,7 @@
 #include <ctype.h>
 #include <tchar.h>
 #include <stdio.h>
+#include <shlwapi.h>
 #include "resource.h"
 
 #define PBS_MARQUEE 0x08
@@ -16,7 +17,6 @@
 #define IDT_TIMER1 1001
 
 LRESULT CALLBACK DlgProc(HWND, UINT, WPARAM, LPARAM);
-void striparg(LPWSTR *cmdline);
 LPCTSTR loadResString(UINT id);
 
 DWORD exitCode;
@@ -32,28 +32,28 @@ LPCTSTR MSG_FAILURE = TEXT("An error occured during installation of the applicat
 int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nCmdShow) {
 	exitCode = ERROR_SUCCESS;
 
-	int argc;
-	LPWSTR cmdline = GetCommandLineW();
-	LPWSTR *argv = CommandLineToArgvW(cmdline, &argc);
+	LPTSTR cmdline = GetCommandLine();
+	LPTSTR *argv = __targv;
+	int argc = __argc;
 	if (argc < 2) {
 		MessageBox(NULL, TEXT("Usage: loader.exe [/s] cmdline"), TEXT("Usage"), MB_OK | MB_ICONINFORMATION);
 		return ERROR_INVALID_PARAMETER;
 	}
-	striparg(&cmdline);
+	cmdline = PathGetArgs(cmdline);
 	if (argv[1][0] == '/') {
-		if (wcslen(argv[1]) == 2 && tolower(argv[1][1]) == 's') {
+		if (_tcslen(argv[1]) == 2 && _totlower(argv[1][1]) == 's') {
 			silentFlag = TRUE;
-			striparg(&cmdline);
+			cmdline = PathGetArgs(cmdline);
 		}
 	}
 
-	STARTUPINFOW startInfo;
+	STARTUPINFO startInfo;
 	PROCESS_INFORMATION procInfo;
 	ZeroMemory(&startInfo, sizeof(startInfo));
 	startInfo.cb = sizeof(startInfo);
 	ZeroMemory(&procInfo, sizeof(procInfo));
 
-	if (!CreateProcessW(NULL, cmdline, NULL, NULL, FALSE, 0, NULL, NULL, &startInfo, &procInfo)) {
+	if (!CreateProcess(NULL, cmdline, NULL, NULL, FALSE, 0, NULL, NULL, &startInfo, &procInfo)) {
 		exitCode = GetLastError();
 		MessageBox(NULL, strerror(exitCode), NULL, MB_ICONERROR);
 		return exitCode;
@@ -178,30 +178,4 @@ LPCTSTR loadResString(UINT id) {
 
 	MessageBox(NULL, strerror(GetLastError()), NULL, MB_OK);
 	return result;
-}
-
-
-void striparg(LPWSTR *cmdline) {
-	while (isspace(**cmdline)) (*cmdline)++;
-
-	BOOL quoted = FALSE;
-	BOOL escape = FALSE;
-
-	while (**cmdline && (!isspace(**cmdline) || quoted)) {
-		if (quoted && **cmdline == '\\') {
-			escape = !escape;
-		} else {
-			if (**cmdline == '\"') {
-				if (!quoted) {
-					quoted = TRUE;
-				} else if (!escape) {
-					quoted = FALSE;
-				}
-			}
-			escape = FALSE;
-		}
-		(*cmdline)++;
-	}
-
-	while (isspace(**cmdline)) (*cmdline)++;
 }

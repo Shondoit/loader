@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -O3 -s -Wall -Wl,--nxcompat -Wl,--dynamicbase -mwindows
+CFLAGS = -O3 -s -Wall -Wl,--nxcompat -Wl,--dynamicbase -mwindows -lshlwapi
 
 OUTDIR = bin
 EXE = loader.exe
