@@ -6,7 +6,7 @@ EXE = loader.exe
 
 all: build release
 
-loader.exe: dwconsole.o loader.o resource.rc.o
+loader.exe: loader.o resource.rc.o
 
 build: $(EXE)
 

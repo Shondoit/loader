@@ -2,13 +2,11 @@
 #define _WIN32_WINNT 0x0501
 
 #include <windows.h>
-#include <wincon.h>
 #include <commctrl.h>
 #include <ctype.h>
 #include <tchar.h>
 #include <stdio.h>
 #include "resource.h"
-#include "dwconsole.h"
 
 #define PBS_MARQUEE 0x08
 #define PBM_SETMARQUEE (WM_USER + 10)
@@ -177,11 +175,6 @@ LPCTSTR loadResString(UINT id) {
 	
 	LPCTSTR result = NULL;
 	LoadString(hMod, id, (LPTSTR)&result, 0);
-
-	AttachConsole(ATTACH_PARENT_PROCESS);
-	ReplaceHandle(STD_OUTPUT_HANDLE);
-	fprintf(stdout, "test");
-	FreeConsole();
 
 	MessageBox(NULL, strerror(GetLastError()), NULL, MB_OK);
 	return result;
