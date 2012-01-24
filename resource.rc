@@ -13,6 +13,7 @@ BEGIN
 	IDS_SUCCESS, "Application installed succesfully."
 	IDS_FAILURE, "An error occured during installation of the application.\nPlease contact the Service Desk and ask for assistance."
 	IDS_INSTALL, "Installing"
+	IDS_UNINSTALL, "Uninstalling"
 	IDS_CLOSE, "Close"
 END
 
@@ -24,6 +25,7 @@ BEGIN
 	IDS_SUCCESS, "Anwendung erfolgreich installiert."
 	IDS_FAILURE, "Ein Fehler ist aufgetreten während der Installation der Anwendung. Bitte kontaktieren Sie den Helpdesk und frag um Unterstützung."
 	IDS_INSTALL, "Installieren"
+	IDS_UNINSTALL, "Deinstallieren"
 	IDS_CLOSE, "Schliessen"
 END
 
@@ -35,6 +37,7 @@ BEGIN
 	IDS_SUCCESS, "Applicatie is succesvol geïnstalleerd."
 	IDS_FAILURE, "Er is een fout opgetreden tijdens de installatie van de applicatie.\nNeem contact op met de Service Desk en vraag om assistentie."
 	IDS_INSTALL, "Installeren"
+	IDS_UNINSTALL, "Deïnstalleren"
 	IDS_CLOSE, "Sluiten"
 END
 
