@@ -23,6 +23,7 @@
 #define __targv __argv
 #endif
 
+void showUsage();
 LRESULT CALLBACK DlgProc(HWND, UINT, WPARAM, LPARAM);
 
 DWORD exitCode;
@@ -38,13 +39,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	LPTSTR *argv = __targv;
 	int argc = __argc;
 	if (argc < 2) {
-		TCHAR message[256 * sizeof(TCHAR)];
-		LoadString(GetModuleHandle(NULL), IDS_USAGE, message, sizeof(message));
-		TCHAR usageMessage[_tcslen(MSG_USAGE) + _tcslen(message) + 3];
-		_tcsncpy(usageMessage, message, sizeof(usageMessage));
-		_tcsncat(usageMessage, TEXT(": "), sizeof(usageMessage));
-		_tcsncat(usageMessage, MSG_USAGE, sizeof(usageMessage));
-		MessageBox(NULL, usageMessage, message, MB_OK | MB_ICONINFORMATION);
+		showUsage();
 		return ERROR_INVALID_PARAMETER;
 	}
 	cmdline = PathGetArgs(cmdline);
@@ -74,6 +69,16 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	CloseHandle(procInfo.hThread);
 
 	return exitCode;
+}
+
+void showUsage() {
+	TCHAR message[256 * sizeof(TCHAR)];
+	LoadString(GetModuleHandle(NULL), IDS_USAGE, message, sizeof(message));
+	TCHAR usageMessage[_tcslen(MSG_USAGE) + _tcslen(message) + 3];
+	_tcsncpy(usageMessage, message, sizeof(usageMessage));
+	_tcsncat(usageMessage, TEXT(": "), sizeof(usageMessage));
+	_tcsncat(usageMessage, MSG_USAGE, sizeof(usageMessage));
+	MessageBox(NULL, usageMessage, message, MB_OK | MB_ICONINFORMATION);
 }
 
 LRESULT CALLBACK DlgProc(HWND hwndDlg, UINT message, WPARAM wParam, LPARAM lParam) {
