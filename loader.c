@@ -17,8 +17,10 @@
 
 #ifdef _UNICODE
 #define _tcserror _wcserror
+#define __targv __wargv
 #else
 #define _tcserror strerror
+#define __targv __argv
 #endif
 
 LRESULT CALLBACK DlgProc(HWND, UINT, WPARAM, LPARAM);
