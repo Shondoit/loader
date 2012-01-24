@@ -30,6 +30,7 @@ DWORD exitCode;
 HANDLE hChildProc;
 BOOL silentFlag;
 BOOL uninstallFlag;
+int estTime;
 
 LPCTSTR MSG_USAGE = TEXT("[/s] [/t=min] [/u]");
 
@@ -64,6 +65,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 							if (strlen(arg) == 2) {
 								switchMatch = TRUE;
 								uninstallFlag = TRUE;
+							}
+							break;
+						case 't':
+							if (strlen(arg) > 3 && arg[2] == '=') {
+								switchMatch = TRUE;
+								estTime = atoi(arg + 3);
 							}
 							break;
 					}
@@ -168,10 +175,29 @@ LRESULT CALLBACK DlgProc(HWND hwndDlg, UINT message, WPARAM wParam, LPARAM lPara
 				LoadString(GetModuleHandle(NULL), IDS_CLOSE, dialogText, MAX_STRING_LENGTH);
 				SetDlgItemText(hwndDlg, IDC_OK, dialogText);
 
+				LPTSTR message = (LPTSTR)malloc((2 * MAX_STRING_LENGTH + 10) * sizeof(TCHAR));
 				UINT loadingID = (uninstallFlag ? IDS_LOADING_U : IDS_LOADING);
+				LoadString(GetModuleHandle(NULL), loadingID, message, MAX_STRING_LENGTH);
+
+				loadingID = (estTime) ? IDS_TIMESPEC : IDS_TIMEUNDEF;
 				LoadString(GetModuleHandle(NULL), loadingID, dialogText, MAX_STRING_LENGTH);
-				SetDlgItemText(hwndDlg, IDC_MESSAGE, dialogText);
+
+				LPTSTR time = (LPTSTR)malloc(9 * sizeof(TCHAR));
+				_itot(estTime, time, 10);
+				DWORD_PTR messageArguments[] = { (DWORD_PTR)time };
+				HLOCAL formattedString = NULL;
+				DWORD formatFlags = FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_STRING |  FORMAT_MESSAGE_ARGUMENT_ARRAY;
+				FormatMessage(formatFlags, dialogText, loadingID, 0, (LPTSTR)&formattedString, 0, (va_list*)messageArguments);
+				free(time);
+
+				_tcsncat(message, _T("\n"), 2 * MAX_STRING_LENGTH + 10);
+				_tcsncat(message, formattedString, 2 * MAX_STRING_LENGTH + 10);
+
+				SetDlgItemText(hwndDlg, IDC_MESSAGE, message);
+
+				LocalFree(formattedString);
 				free(dialogText);
+				free(message);
 			}
 
 			SetTimer(hwndDlg, IDT_TIMER1, 500, (TIMERPROC)NULL);
