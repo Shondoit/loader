@@ -29,6 +29,7 @@ LRESULT CALLBACK DlgProc(HWND, UINT, WPARAM, LPARAM);
 DWORD exitCode;
 HANDLE hChildProc;
 BOOL silentFlag;
+BOOL uninstallFlag;
 
 LPCTSTR MSG_USAGE = TEXT("[/s] [/t=min] [/u]");
 
@@ -36,17 +37,44 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	exitCode = ERROR_SUCCESS;
 
 	LPTSTR cmdline = GetCommandLine();
-	LPTSTR *argv = __targv;
+	LPSTR *argv = __argv;
 	int argc = __argc;
 	if (argc < 2) {
 		showUsage();
 		return ERROR_INVALID_PARAMETER;
 	}
 	cmdline = PathGetArgs(cmdline);
-	if (argv[1][0] == _T('/')) {
-		if (_totlower(argv[1][1]) == _T('s')) {
-			silentFlag = TRUE;
+	int index = 1;
+	BOOL switchMatch;
+	while (index < argc) {
+		switchMatch = FALSE;
+		LPSTR arg = argv[index];
+		if (strlen(arg) >= 2) {
+			switch (arg[0]) {
+				case '-':
+				case '/':
+					switch (tolower(arg[1])) {
+						case 's':
+							if (strlen(arg) == 2) {
+								switchMatch = TRUE;
+								silentFlag = TRUE;
+							}
+							break;
+						case 'u':
+							if (strlen(arg) == 2) {
+								switchMatch = TRUE;
+								uninstallFlag = TRUE;
+							}
+							break;
+					}
+					break;
+			}
+		}
+		if (switchMatch) {
 			cmdline = PathGetArgs(cmdline);
+			index++;
+		} else {
+			index = argc;
 		}
 	}
 
@@ -140,7 +168,8 @@ LRESULT CALLBACK DlgProc(HWND hwndDlg, UINT message, WPARAM wParam, LPARAM lPara
 				LoadString(GetModuleHandle(NULL), IDS_CLOSE, dialogText, MAX_STRING_LENGTH);
 				SetDlgItemText(hwndDlg, IDC_OK, dialogText);
 
-				LoadString(GetModuleHandle(NULL), IDS_LOADING, dialogText, MAX_STRING_LENGTH);
+				UINT loadingID = (uninstallFlag ? IDS_LOADING_U : IDS_LOADING);
+				LoadString(GetModuleHandle(NULL), loadingID, dialogText, MAX_STRING_LENGTH);
 				SetDlgItemText(hwndDlg, IDC_MESSAGE, dialogText);
 				free(dialogText);
 			}

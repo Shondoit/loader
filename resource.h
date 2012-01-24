@@ -11,6 +11,7 @@
 #define IDS_CLOSE 6
 #define IDS_TIMESPEC 7
 #define IDS_TIMEUNDEF 8
+#define IDS_LOADING_U 9
 
 #define IDD_LOADER 101
 #define IDC_OK 1

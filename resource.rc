@@ -10,6 +10,7 @@ STRINGTABLE
 BEGIN
 	IDS_USAGE, L"Usage: %1 %2 path"
 	IDS_LOADING, L"Please wait while the application is being installed."
+	IDS_LOADING_U, L"Please wait while the application is being uninstalled."
 	IDS_TIMESPEC, L"This will take about %1 minutes..."
 	IDS_TIMEUNDEF, L"This might take a while..."
 	IDS_SUCCESS, L"Application installed succesfully."
@@ -24,6 +25,7 @@ STRINGTABLE
 BEGIN
 	IDS_USAGE, L"Verbrauch: %1 %2 pfad"
 	IDS_LOADING, L"Bitte warten Sie, während die Anwendung installiert wird."
+	IDS_LOADING_U, L"Bitte warten Sie, während die Anwendung deinstalliert wird."
 	IDS_TIMESPEC, L"Dies dauert ca. %1 Minuten..."
 	IDS_TIMEUNDEF, L"Dies kann eine Weile dauern..."
 	IDS_SUCCESS, L"Anwendung erfolgreich installiert."
@@ -38,6 +40,7 @@ STRINGTABLE
 BEGIN
 	IDS_USAGE, L"Gebruik"
 	IDS_LOADING, L"Gelieve te wachten terwijl de applicatie wordt geïnstalleerd."
+	IDS_LOADING_U, L"Gelieve te wachten terwijl de applicatie wordt gedeïnstalleerd."
 	IDS_TIMESPEC, L"Dit zal ongeveer %1 minuten duren..."
 	IDS_TIMEUNDEF, L"Dit kan enige tijd duren..."
 	IDS_SUCCESS, L"Applicatie is succesvol geïnstalleerd."
