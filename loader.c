@@ -132,15 +132,17 @@ LRESULT CALLBACK DlgProc(HWND hwndDlg, UINT message, WPARAM wParam, LPARAM lPara
 					EnableWindow(hwndOK, FALSE);
 				}
 
-				TCHAR dialogText[256 * sizeof(TCHAR)];
-				LoadString(GetModuleHandle(NULL), IDS_INSTALL, dialogText, sizeof(dialogText));
+				LPTSTR dialogText = (LPTSTR)malloc(MAX_STRING_LENGTH * sizeof(TCHAR));
+				UINT titleID = (uninstallFlag ? IDS_UNINSTALL : IDS_INSTALL);
+				LoadString(GetModuleHandle(NULL), titleID, dialogText, MAX_STRING_LENGTH);
 				SetWindowText(hwndDlg, dialogText);
 
-				LoadString(GetModuleHandle(NULL), IDS_CLOSE, dialogText, sizeof(dialogText));
+				LoadString(GetModuleHandle(NULL), IDS_CLOSE, dialogText, MAX_STRING_LENGTH);
 				SetDlgItemText(hwndDlg, IDC_OK, dialogText);
 
-				LoadString(GetModuleHandle(NULL), IDS_LOADING, dialogText, sizeof(dialogText));
+				LoadString(GetModuleHandle(NULL), IDS_LOADING, dialogText, MAX_STRING_LENGTH);
 				SetDlgItemText(hwndDlg, IDC_MESSAGE, dialogText);
+				free(dialogText);
 			}
 
 			SetTimer(hwndDlg, IDT_TIMER1, 500, (TIMERPROC)NULL);
@@ -179,14 +181,15 @@ LRESULT CALLBACK DlgProc(HWND hwndDlg, UINT message, WPARAM wParam, LPARAM lPara
 							SetWindowLong(hwndProg, GWL_STYLE, dwStyle & ~PBS_MARQUEE);
 							SendMessage(hwndProg, PBM_SETPOS, 100, 0);
 
-							TCHAR dialogText[256 * sizeof(TCHAR)];
+							LPTSTR dialogText = (LPTSTR)malloc(MAX_STRING_LENGTH * sizeof(TCHAR));
 							if (exitCode == ERROR_SUCCESS) {
-								LoadString(GetModuleHandle(NULL), IDS_SUCCESS, dialogText, sizeof(dialogText));
+								LoadString(GetModuleHandle(NULL), IDS_SUCCESS, dialogText, MAX_STRING_LENGTH);
 							} else {
-								LoadString(GetModuleHandle(NULL), IDS_FAILURE, dialogText, sizeof(dialogText));
+								LoadString(GetModuleHandle(NULL), IDS_FAILURE, dialogText, MAX_STRING_LENGTH);
 								SendMessage(hwndProg, PBM_SETSTATE, PBST_ERROR, 0);
 							}
 							SetDlgItemText(hwndDlg, IDC_MESSAGE, dialogText);
+							free(dialogText);
 
 							HWND hwndOK = GetDlgItem(hwndDlg, IDC_OK);
 							EnableWindow(hwndOK, TRUE);
