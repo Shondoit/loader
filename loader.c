@@ -238,9 +238,11 @@ LRESULT CALLBACK DlgProc(HWND hwndDlg, UINT message, WPARAM wParam, LPARAM lPara
 
 							LPTSTR dialogText = (LPTSTR)malloc(MAX_STRING_LENGTH * sizeof(TCHAR));
 							if (exitCode == ERROR_SUCCESS) {
-								LoadString(GetModuleHandle(NULL), IDS_SUCCESS, dialogText, MAX_STRING_LENGTH);
+								UINT successID = (uninstallFlag ? IDS_SUCCESS_U : IDS_SUCCESS);
+								LoadString(GetModuleHandle(NULL), successID, dialogText, MAX_STRING_LENGTH);
 							} else {
-								LoadString(GetModuleHandle(NULL), IDS_FAILURE, dialogText, MAX_STRING_LENGTH);
+								UINT failureID = (uninstallFlag ? IDS_FAILURE_U : IDS_FAILURE);
+								LoadString(GetModuleHandle(NULL), failureID, dialogText, MAX_STRING_LENGTH);
 								SendMessage(hwndProg, PBM_SETSTATE, PBST_ERROR, 0);
 							}
 							SetDlgItemText(hwndDlg, IDC_MESSAGE, dialogText);
