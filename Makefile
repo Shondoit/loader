@@ -2,9 +2,13 @@ CC = gcc
 CFLAGS = -O3 -s -Wall -Wl,--nxcompat -Wl,--dynamicbase -mwindows -lshlwapi -DUNICODE -D_UNICODE
 
 OUTDIR = bin
+DBGDIR = dbg
 EXE = loader.exe
 
 all: build release
+
+debug: CFLAGS = -ggdb -Wall -mwindows -lshlwapi -DUNICODE -D_UNICODE
+debug: build
 
 loader.exe: loader.o resource.rc.o
 
