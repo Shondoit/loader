@@ -7,6 +7,8 @@
 #define IDS_INSTALL 4
 #define IDS_UNINSTALL 5
 #define IDS_CLOSE 6
+#define IDS_TIMESPEC 7
+#define IDS_TIMEUNDEF 8
 
 #define IDD_LOADER 101
 #define IDC_OK 1
