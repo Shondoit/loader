@@ -30,7 +30,7 @@ DWORD exitCode;
 HANDLE hChildProc;
 BOOL silentFlag;
 
-LPCTSTR MSG_USAGE = TEXT("loader.exe [/s] commandline");
+LPCTSTR MSG_USAGE = TEXT("[/s] [/t=min] [/u]");
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
 	exitCode = ERROR_SUCCESS;
@@ -72,13 +72,24 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 }
 
 void showUsage() {
-	TCHAR message[256 * sizeof(TCHAR)];
-	LoadString(GetModuleHandle(NULL), IDS_USAGE, message, sizeof(message));
-	TCHAR usageMessage[_tcslen(MSG_USAGE) + _tcslen(message) + 3];
-	_tcsncpy(usageMessage, message, sizeof(usageMessage));
-	_tcsncat(usageMessage, TEXT(": "), sizeof(usageMessage));
-	_tcsncat(usageMessage, MSG_USAGE, sizeof(usageMessage));
-	MessageBox(NULL, usageMessage, message, MB_OK | MB_ICONINFORMATION);
+	LPTSTR moduleName = (LPTSTR)malloc(MAX_PATH * sizeof(TCHAR));
+	GetModuleFileName(NULL, moduleName, MAX_PATH);
+	PathStripPath(moduleName);
+
+	LPTSTR message = (LPTSTR)malloc(MAX_STRING_LENGTH * sizeof(TCHAR));
+	LoadString(NULL, IDS_USAGE, message, MAX_STRING_LENGTH);
+
+	DWORD_PTR messageArguments[] = { (DWORD_PTR)moduleName, (DWORD_PTR)MSG_USAGE };
+
+	HLOCAL usageMessage = NULL;
+	DWORD formatFlags = FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_STRING |  FORMAT_MESSAGE_ARGUMENT_ARRAY;
+	FormatMessage(formatFlags, message, IDS_USAGE, 0, (LPTSTR)&usageMessage, 0, (va_list*)messageArguments);
+
+	MessageBox(NULL, (LPTSTR)usageMessage, NULL, MB_OK | MB_ICONINFORMATION);
+
+	LocalFree(usageMessage);
+	free(moduleName);
+	free(message);
 }
 
 LRESULT CALLBACK DlgProc(HWND hwndDlg, UINT message, WPARAM wParam, LPARAM lParam) {

@@ -1,3 +1,5 @@
+#define MAX_STRING_LENGTH 256
+
 #define IDI_APPICON 201
 
 #define IDS_USAGE 0
