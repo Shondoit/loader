@@ -1,4 +1,3 @@
-#define DEBUG 0
 #define _WIN32_WINNT 0x0501
 #define __MSVCRT_VERSION__ 0x0700
 
