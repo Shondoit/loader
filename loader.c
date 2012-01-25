@@ -56,6 +56,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				case '/':
 					switch (tolower(arg[1])) {
 						case 's':
+						case 'q':
 							if (strlen(arg) == 2) {
 								switchMatch = TRUE;
 								silentFlag = TRUE;
