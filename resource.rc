@@ -68,3 +68,35 @@ BEGIN
    CONTROL L"", IDC_PROGRESS, "msctls_progress32", WS_CHILD | WS_BORDER, 7, 42, 183, 10
    CONTROL L"", IDC_OK, "BUTTON", BS_PUSHBUTTON | WS_CHILD | WS_TABSTOP, 195, 40, 60, 14
 END
+
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+VS_VERSION_INFO VERSIONINFO
+FILEVERSION VER_FILEVERSION
+PRODUCTVERSION VER_PRODUCTVERSION
+FILEOS VOS_NT_WINDOWS32
+FILETYPE VFT_APP
+#ifdef DEBUG
+FILEFLAGS VS_FF_DEBUG
+#endif
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904B0"
+        BEGIN
+			VALUE L"Comments", L""
+			VALUE L"CompanyName", L"Saxion Hogescholen"
+			VALUE L"FileDescription", L""
+			VALUE L"FileVersion", VER_FILEVERSION_STR
+			VALUE L"InternalName", L"loader.exe"
+			VALUE L"LegalCopyright", L"Copyright \x00A9 2012 Saxion Hogescholen"
+			VALUE L"LegalTrademarks", L""
+			VALUE L"OriginalFilename", L"loader.exe"
+			VALUE L"ProductName", L"loader.exe"
+			VALUE L"ProductVersion", VER_PRODUCTVERSION_STR
+		END
+	END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE L"Translation", 0x0409, 1200
+    END
+END

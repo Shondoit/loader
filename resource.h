@@ -1,3 +1,10 @@
+#define VER_FILEVERSION             1,0,0,0
+#define VER_FILEVERSION_STR         L"1.0.0.0"
+
+#define VER_PRODUCTVERSION          1,0,0,0
+#define VER_PRODUCTVERSION_STR      L"1.0.0.0"
+
+
 #define MAX_STRING_LENGTH 256
 
 #define IDI_APPICON 201
