@@ -19,6 +19,8 @@ BEGIN
 	IDS_FAILURE_U, L"An error occured during deinstallation of the application.\nPlease contact the Service Desk and ask for assistance."
 	IDS_INSTALL, L"Installing"
 	IDS_UNINSTALL, L"Uninstalling"
+	IDS_DETAILS, L"Details"
+	IDS_ERRORCODE, L"Error code: %1!u! (0x%1!X!)\n%2"
 	IDS_CLOSE, L"Close"
 END
 
@@ -36,6 +38,8 @@ BEGIN
 	IDS_FAILURE_U, L"Ein Fehler ist aufgetreten während der Deinstallation der Anwendung. Bitte kontaktieren Sie den Helpdesk und frag um Unterstützung."
 	IDS_INSTALL, L"Installieren"
 	IDS_UNINSTALL, L"Deinstallieren"
+	IDS_DETAILS, L"Details"
+	IDS_ERRORCODE, L"Fehlercode: %1!u! (0x%1!X!)\n%2"
 	IDS_CLOSE, L"Schlie\x00DFen"
 END
 
@@ -53,10 +57,12 @@ BEGIN
 	IDS_FAILURE_U, L"Er is een fout opgetreden tijdens de deinstallatie van de applicatie.\nNeem contact op met de Service Desk en vraag om assistentie."
 	IDS_INSTALL, L"Installeren"
 	IDS_UNINSTALL, L"Deïnstalleren"
+	IDS_DETAILS, L"Details"
+	IDS_ERRORCODE, L"Foutcode: %1!u! (0x%1!X!)\n%2"
 	IDS_CLOSE, L"Sluiten"
 END
 
-IDD_LOADER DIALOGEX 150, 150, 261, 60
+IDD_LOADER DIALOGEX 150, 150, 261, 63
 CAPTION L""
 STYLE DS_MODALFRAME | DS_NOIDLEMSG | WS_POPUP | WS_CAPTION
 EXSTYLE WS_EX_APPWINDOW
@@ -65,8 +71,9 @@ FONT 9, "MS Shell Dlg"
 BEGIN
    CONTROL IDI_APPICON, IDC_DLGICON, "STATIC", SS_ICON | WS_CHILD | WS_VISIBLE, 7, 7, 20, 20
    CONTROL L"", IDC_MESSAGE, "STATIC", SS_LEFT | WS_CHILD | WS_VISIBLE | WS_GROUP, 31, 7, 223, 28
-   CONTROL L"", IDC_PROGRESS, "msctls_progress32", WS_CHILD | WS_BORDER, 7, 42, 183, 10
-   CONTROL L"", IDC_OK, "BUTTON", BS_PUSHBUTTON | WS_CHILD | WS_TABSTOP, 195, 40, 60, 14
+   CONTROL L"", IDC_PROGRESS, "msctls_progress32", WS_CHILD | WS_BORDER, 7, 45, 183, 10
+   CONTROL L"", IDC_DETAILS, "BUTTON", BS_PUSHBUTTON | WS_CHILD | WS_TABSTOP, 195, 26, 60, 14
+   CONTROL L"", IDC_OK, "BUTTON", BS_PUSHBUTTON | WS_CHILD | WS_TABSTOP, 195, 43, 60, 14
 END
 
 LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US

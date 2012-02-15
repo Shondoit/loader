@@ -21,9 +21,12 @@
 #define IDS_LOADING_U 9
 #define IDS_SUCCESS_U 10
 #define IDS_FAILURE_U 11
+#define IDS_DETAILS 12
+#define IDS_ERRORCODE 13
 
 #define IDD_LOADER 101
 #define IDC_OK 1
 #define IDC_DLGICON 12
 #define IDC_MESSAGE 8
 #define IDC_PROGRESS 10
+#define IDC_DETAILS 11

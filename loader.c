@@ -167,6 +167,8 @@ LRESULT CALLBACK DlgProc(HWND hwndDlg, UINT message, WPARAM wParam, LPARAM lPara
 				} else {
 					EnableWindow(hwndOK, FALSE);
 				}
+				HWND hwndDetails = GetDlgItem(hwndDlg, IDC_DETAILS);
+				ShowWindow(hwndDetails, SW_HIDE);
 
 				LPTSTR dialogText = (LPTSTR)malloc(MAX_STRING_LENGTH * sizeof(TCHAR));
 				UINT titleID = (uninstallFlag ? IDS_UNINSTALL : IDS_INSTALL);
@@ -175,6 +177,9 @@ LRESULT CALLBACK DlgProc(HWND hwndDlg, UINT message, WPARAM wParam, LPARAM lPara
 
 				LoadString(GetModuleHandle(NULL), IDS_CLOSE, dialogText, MAX_STRING_LENGTH);
 				SetDlgItemText(hwndDlg, IDC_OK, dialogText);
+
+				LoadString(GetModuleHandle(NULL), IDS_DETAILS, dialogText, MAX_STRING_LENGTH);
+				SetDlgItemText(hwndDlg, IDC_DETAILS, dialogText);
 
 				LPTSTR message = (LPTSTR)malloc((2 * MAX_STRING_LENGTH + 10) * sizeof(TCHAR));
 				UINT loadingID = (uninstallFlag ? IDS_LOADING_U : IDS_LOADING);
@@ -212,6 +217,24 @@ LRESULT CALLBACK DlgProc(HWND hwndDlg, UINT message, WPARAM wParam, LPARAM lPara
 						return TRUE;
 					}
 					break;
+				case IDC_DETAILS: {
+					LPTSTR errorMsg = _tcserror(exitCode);
+
+					LPTSTR messsageFormat = (LPTSTR)malloc(MAX_STRING_LENGTH);
+					LoadString(NULL, IDS_ERRORCODE, messsageFormat, MAX_STRING_LENGTH);
+
+					HLOCAL messageString = NULL;
+					DWORD_PTR messageArguments[] = { (DWORD_PTR)exitCode, (DWORD_PTR)errorMsg };
+					DWORD formatFlags = FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_STRING |  FORMAT_MESSAGE_ARGUMENT_ARRAY;
+					FormatMessage(formatFlags, messsageFormat, IDS_ERRORCODE, 0, (LPTSTR)&messageString, 0, (va_list*)messageArguments);
+
+					MessageBox(NULL, (LPTSTR)messageString, NULL, MB_OK | MB_ICONEXCLAMATION);
+
+					LocalFree(messageString);
+					free(messsageFormat);
+
+					break;
+				}
 			}
 			break;
 		case WM_TIMER:
@@ -245,6 +268,9 @@ LRESULT CALLBACK DlgProc(HWND hwndDlg, UINT message, WPARAM wParam, LPARAM lPara
 								UINT failureID = (uninstallFlag ? IDS_FAILURE_U : IDS_FAILURE);
 								LoadString(GetModuleHandle(NULL), failureID, dialogText, MAX_STRING_LENGTH);
 								SendMessage(hwndProg, PBM_SETSTATE, PBST_ERROR, 0);
+
+								HWND hwndDetails = GetDlgItem(hwndDlg, IDC_DETAILS);
+								ShowWindow(hwndDetails, SW_SHOW);
 							}
 							SetDlgItemText(hwndDlg, IDC_MESSAGE, dialogText);
 							free(dialogText);
